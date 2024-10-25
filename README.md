@@ -1,4 +1,4 @@
-# CipherCLI-Go - AES Encryption CLI Tool
+# CipherCLI - AES Encryption CLI Tool
 `CipherCLI`is a simple CLI tool that allows you to encrypt and decrypt text using AES encryption in CFB mode. The secret key is securely loaded from an environment variable, and the encrypted output is base64-encoded for safe storage and transmission.
 
 ## Features
