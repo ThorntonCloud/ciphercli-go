@@ -4,8 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"thorntoncloud/ciphercli-go/config"
-	"thorntoncloud/ciphercli-go/encryption"
+
+	"github.com/thorntoncloud/ciphercli-go/config"
+	"github.com/thorntoncloud/ciphercli-go/encryption"
 )
 
 func main() {
