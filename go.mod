@@ -1,4 +1,4 @@
-module github.com/thorntoncloud/ciphercli-go
+module thorntoncloud/ciphercli-go
 
 go 1.23.2
 
