@@ -2,51 +2,68 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/thorntoncloud/ciphercli-go/config"
 	"github.com/thorntoncloud/ciphercli-go/encryption"
 )
 
-func main() {
-	// Initialize configuration
-	config.InitConfig()
-	secretKey := config.GetSecret()
+var secretKey string
 
-	if secretKey == "" {
-		fmt.Println("Secret key is missing")
-		return
-	}
+var rootCmd = &cobra.Command{
+	Use:   "ciphercli",
+	Short: "A simple CLI tool for encryption and decryption",
+	Long:  `ciphercli is a command-line interface tool that allows you to encrypt and decrypt text using AES encryption.`,
+}
 
-	// Define flags for command-line arguments
-	action := flag.String("action", "encrypt", "Specify 'encrypt' or 'decrypt'")
-	text := flag.String("text", "", "Text to encrypt or decrypt")
-
-	flag.Parse()
-
-	if *text == "" {
-		fmt.Println("Please provide the text using the -text flag.")
-		return
-	}
-
-	if *action == "encrypt" {
-		// Encrypt the text
-		encText, err := encryption.Encrypt(*text, secretKey)
+var encryptCmd = &cobra.Command{
+	Use:   "encrypt [text]",
+	Short: "Encrypt the provided text",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		text := args[0]
+		encText, err := encryption.Encrypt(text, secretKey)
 		if err != nil {
 			fmt.Println("Error encrypting your classified text:", err)
 			return
 		}
 		fmt.Println("Encrypted Text:", encText)
-	} else if *action == "decrypt" {
-		// Decrypt the text
-		decText, err := encryption.Decrypt(*text, secretKey)
+	},
+}
+
+var decryptCmd = &cobra.Command{
+	Use:   "decrypt [text]",
+	Short: "Decrypt the provided text",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		text := args[0]
+		decText, err := encryption.Decrypt(text, secretKey)
 		if err != nil {
 			fmt.Println("Error decrypting your encrypted text:", err)
 			return
 		}
 		fmt.Println("Decrypted Text:", decText)
-	} else {
-		fmt.Println("Invalid action. Please specify 'encrypt' or 'decrypt'.")
+	},
+}
+
+func main() {
+	// Initialize configuration
+	config.InitConfig()
+	secretKey = config.GetSecret()
+
+	if secretKey == "" {
+		fmt.Println("Secret key is missing")
+		os.Exit(1)
+	}
+
+	// Add commands to root command
+	rootCmd.AddCommand(encryptCmd, decryptCmd)
+
+	// Execute the root command
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }

@@ -1,15 +1,15 @@
 # CipherCLI - AES Encryption CLI Tool
-`CipherCLI`is a simple CLI tool that allows you to encrypt and decrypt text using AES encryption in CFB mode. The secret key is securely loaded from an environment variable, and the encrypted output is base64-encoded for safe storage and transmission.
+`ciphercli` is a command-line tool for securely encrypting and decrypting text using AES encryption in CFB mode. The tool loads a secret key from an environment variable, ensuring secure handling of sensitive data. Encrypted output is base64-encoded, making it suitable for storage or transmission.
 
 ## Features
-- AES encryption in CFB mode with a random IV.
-- Base64 encoding for encrypted data.
-- CLI Usage for easy integration into shell scripts or terminal commands.
-- Supports both encryption and decryption of text.
+- AES encryption in CFB mode with a random IV for enhanced security.
+- Base64 encoding for safe storage of encrypted data.
+- Command-line interface with simple, clear subcommands for encryption and decryption.
+- Ideal for integration into scripts or standalone use in the terminal.
 
 ## Prerequisites
-- **Go** version 1.23 or higher installed.
-- A `.env` file that contains the secret key (see setup instructions below)
+- Go version 1.23 or higher.
+- `.env` file containing the secret key (see setup instructions below).
 
 ## Installation
 ### 1. Clone the Repository
@@ -17,86 +17,102 @@
 git clone https://github.com/thorntoncloud/ciphercli-go.git
 cd ciphercli-go
 ```
-### 2. Setup the `.env` File
-Create a `.env` file in the Encrypt directory and add the following line to store your secret key. The key must be 16, 24, or 32 bytes long.
+
+### 2. Set Up the .env File
+Create a `.env` file in the project’s root directory and add your secret key (16, 24, or 32 bytes long):
+
 ```bash
 SECRET_SAUCE=your-secret-key-here
 ```
-Replace `your-secret-key-here` with your actual secret key.
+Replace your-secret-key-here with your actual key.
 
 ### 3. Build the Executable
-To build the tool into an executable, run the following Go command from the Encrypt directory:
+To build the CLI tool, run:
 ```bash
 go build -o ciphercli
 ```
-This will create an `ciphercli` executable (or ciphercli.exe on Windows).
-
-You can also name the executable something else, if you like. Just change `ciphercli` after the `-o` flag in the build command to the name you like better.
+This will create a `ciphercli` executable (or `ciphercli.exe` on Windows) in the project directory.
 
 ## Usage
-### Encrypting Text
-To encrypt text, use the following command:
-```bash
-./ciphercli -action encrypt -text "your secret message"
-```
+CipherCLI uses spf13/cobra for a clear, structured command interface. You can choose encrypt or decrypt subcommands with a specified text to encrypt or decrypt.
 
+### Encrypt Text
+To encrypt text, use the encrypt command:
+
+```bash
+./ciphercli encrypt "your secret message"
+```
 Example:
 ```bash
-./ciphercli -action encrypt -text "This is a top secret message."
+./ciphercli encrypt "This is a top secret message."
 ```
-The tool will return the base64-encoded encrypted text:
+
+The CLI will return the base64-encoded encrypted text:
+
 ```bash
 Encrypted Text: C2FuZG... (base64 output)
 ```
+### Decrypt Text
+To decrypt encrypted text, use the decrypt command:
 
-### Decrypting Text
-To decrypt an encrypted text, use the following command:
 ```bash
-./ciphercli -action decrypt -text "base64-encoded-encrypted-text"
+./ciphercli decrypt "base64-encoded-encrypted-text"
 ```
-
 Example:
 ```bash
-./ciphercli -action decrypt -text "C2FuZG..."
+./ciphercli decrypt "C2FuZG..."
 ```
 
-The tool will return the original decrypted text:
+The CLI will return the original decrypted text:
+
 ```bash
 Decrypted Text: This is a top secret message
 ```
 
 ### Command-Line Options
-- `-action`: Specify the action as either `encrypt` or `decrypt`.
-- `-text`: The text to be encrypted or decrypted.
+- `encrypt`: Encrypts the specified text.
+- `decrypt`: Decrypts the specified base64-encoded encrypted text.
+
+Example commands:
+
+```bash
+ciphercli encrypt "Text to encrypt"
+ciphercli decrypt "EncryptedTextHere"
+```
 
 ## Adding the Tool to Your PATH
-To be able to call the tool from anywhere in the CLI without specifying the full path to the executable, you can add the location of the `ciphercli` binary to your system's `PATH`.
+You can add `ciphercli` to your PATH for easier access.
 
 ### On Linux / macOS
-1. Move the binary to `/usr/local/bin` (or another directory in your `PATH`):
-   ```bash
-   sudo mv ciphercli /usr/local/bin
-   ```
-2. Verify it works by typing:
-   ```bash
-   ciphercli -action encrypt -text "test"
-   ```
+Move the binary to /usr/local/bin:
+
+```bash
+sudo mv ciphercli /usr/local/bin
+```
+
+Verify it’s accessible:
+```bash
+ciphercli encrypt "test message"
+```
 
 ### On Windows
-1. Move the `ciphercli.exe` binary to the desired directory, for example, `C:\tools\ciphercli`.
-2. Add the directory to your system's `PATH`:
-   - Open **Control Panel**  → **System** → **Advanced System Settings**.
-   - Click **Environment Variables**.
-   - Under **System Variables**, find the `Path` variable, select it, and click **Edit**.
-   - Add the path to the directory where you saved `ciphercli.exe` (e.g., `C:\tools\ciphercli).
-   - Click **OK** to save and apply.
-3. Verify it works by typing the following command into **Command Prompt** or **PowerShell**
-    ```bash
-    ciphercli -action encrypt -text "text"
-    ```
+Move `ciphercli.exe` to your preferred directory, e.g., C:\tools\ciphercli.
+
+Add the directory to your system’s PATH:
+
+1. Open Control Panel → System → Advanced System Settings.
+2. Go to Environment Variables.
+3. Under System Variables, find the Path variable, select it, and click Edit.
+4. Add the path to the directory containing ciphercli.exe (e.g., C:\tools\ciphercli).
+5. Click OK to save.
+
+Verify it’s accessible:
+```bash
+ciphercli encrypt "text"
+```
 
 ## Contributing
-Feel free to fork this repository, submit pull requests, or file issues with any bug reports or feature requests.
+Contributions are welcome! Feel free to fork this repository, open pull requests, or file issues for bug reports or feature requests.
 
 ## License
 This project is licensed under the MIT License.
