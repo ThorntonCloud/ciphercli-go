@@ -48,6 +48,16 @@ var decryptCmd = &cobra.Command{
 	},
 }
 
+var version = "1.0.0"
+
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "Display the current version of CipherCLI",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("CipherCLI Version:", version, "🎉")
+	},
+}
+
 func main() {
 	// Initialize configuration
 	config.InitConfig()
@@ -59,7 +69,7 @@ func main() {
 	}
 
 	// Add commands to root command
-	rootCmd.AddCommand(encryptCmd, decryptCmd)
+	rootCmd.AddCommand(encryptCmd, decryptCmd, versionCmd)
 
 	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {
